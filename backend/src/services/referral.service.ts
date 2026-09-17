@@ -34,15 +34,15 @@ export async function getFunnelCounts(): Promise<FunnelCounts> {
 
   // Unique referees credited with each outcome (a referee may appear multiple
   // times across events, e.g. registered then later firstRide).
-  const registered = new Set(
-    referralEvents.filter((e: ReferralEvent) => e.outcome === "registered").map((e) => e.refereeId),
-  );
-  const firstRide = new Set(
-    referralEvents.filter((e: ReferralEvent) => e.outcome === "firstRide").map((e) => e.refereeId),
-  );
-  const repeatRider = new Set(
-    referralEvents.filter((e: ReferralEvent) => e.outcome === "repeatRider").map((e) => e.refereeId),
-  );
+  const byOutcome = (outcome: ReferralEvent["outcome"]) =>
+    new Set(
+      referralEvents
+        .filter((e: ReferralEvent) => e.outcome === outcome)
+        .map((e: ReferralEvent) => e.refereeId),
+    );
+  const registered = byOutcome("registered");
+  const firstRide = byOutcome("firstRide");
+  const repeatRider = byOutcome("repeatRider");
   // "referred" = distinct referrers who have successfully referred at least one person.
   const referred = new Set(referralEvents.map((e: ReferralEvent) => e.referrerId));
 

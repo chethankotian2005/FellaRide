@@ -32,6 +32,7 @@
  */
 
 import { randomUUID } from "crypto";
+import { QueryDocumentSnapshot } from "firebase-admin/firestore";
 import { getDb } from "../config/firebase";
 import { Collections } from "../models/collections";
 import { CommunityMember, ComputedScores, PublicSignals } from "../models/communityMember.model";
@@ -206,10 +207,10 @@ export async function listInterventions(): Promise<InterventionWithMember[]> {
   ]);
 
   const namesById = new Map(
-    membersSnap.docs.map((d) => [d.id, (d.data() as CommunityMember).name]),
+    membersSnap.docs.map((d: QueryDocumentSnapshot) => [d.id, (d.data() as CommunityMember).name]),
   );
 
-  return interventionsSnap.docs.map((d) => {
+  return interventionsSnap.docs.map((d: QueryDocumentSnapshot) => {
     const intervention = d.data() as Intervention;
     return { ...intervention, memberName: namesById.get(intervention.memberId) ?? null };
   });
