@@ -4,7 +4,11 @@ services:
     runtime: node
     plan: free
     rootDir: backend
-    buildCommand: npm install && npm run build
+    # --include=dev is required: this service sets NODE_ENV=production, and
+    # npm skips devDependencies (typescript, ts-node) under that env unless
+    # told otherwise — `tsc` then falls back to Render's newer global
+    # TypeScript, which dropped support for this project's moduleResolution.
+    buildCommand: npm ci --include=dev && npm run build
     startCommand: npm start
     healthCheckPath: /health
     envVars:
