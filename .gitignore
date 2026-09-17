@@ -1,0 +1,64 @@
+# ---- Node / npm (backend, dashboard) ----
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+*.tsbuildinfo
+.env
+.env.local
+.env.*.local
+
+# backend build output
+backend/dist/
+
+# ---- Next.js (dashboard) ----
+dashboard/.next/
+dashboard/out/
+dashboard/build/
+dashboard/.vercel/
+dashboard/next-env.d.ts
+
+# ---- Flutter / Dart (mobile) ----
+mobile/.dart_tool/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/.pub-cache/
+mobile/.pub/
+mobile/build/
+mobile/.packages
+mobile/*.iml
+
+# Android
+mobile/android/.gradle/
+mobile/android/local.properties
+mobile/android/**/build/
+mobile/android/key.properties
+mobile/**/*.keystore
+mobile/**/*.jks
+
+# iOS
+mobile/ios/Flutter/Flutter.framework
+mobile/ios/Flutter/Flutter.podspec
+mobile/ios/Pods/
+mobile/ios/.symlinks/
+mobile/ios/Podfile.lock
+mobile/**/*.mode1v3
+mobile/**/*.mode2v3
+mobile/**/*.moved-aside
+mobile/**/*.pbxuser
+mobile/**/*.perspectivev3
+mobile/**/xcuserdata/
+
+# Firebase configs with real credentials (keep placeholders/examples only)
+**/google-services.json
+**/GoogleService-Info.plist
+firebase-debug.log
+
+# ---- Editors / OS ----
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
