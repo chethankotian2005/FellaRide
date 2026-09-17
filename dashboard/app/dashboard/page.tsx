@@ -1,11 +1,10 @@
 "use client";
 
-// NOTE ON AUTH: this route is intentionally open for the hackathon demo (the
-// project brief explicitly scopes it that way). In a real deployment, this
-// page would sit behind an internal-auth check — e.g. Next.js middleware
-// verifying a Firebase session cookie restricted to a growth-team allowlist,
-// redirecting unauthenticated requests to a login page before rendering
-// anything below.
+// NOTE ON AUTH: this route is intentionally open in this prototype. In a real
+// deployment, this page would sit behind an internal-auth check — e.g.
+// Next.js middleware verifying a Firebase session cookie restricted to a
+// growth-team allowlist, redirecting unauthenticated requests to a login
+// page before rendering anything below.
 
 import { useCallback, useEffect, useState } from "react";
 import {

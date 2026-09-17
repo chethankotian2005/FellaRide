@@ -51,7 +51,11 @@ mobile/**/*.pbxuser
 mobile/**/*.perspectivev3
 mobile/**/xcuserdata/
 
-# Firebase configs with real credentials (keep placeholders/examples only)
+# Firebase client app configs and Admin SDK service-account keys — kept out
+# of git as a precaution. The release-apk workflow reconstructs
+# google-services.json from a repo secret at build time (see
+# .github/workflows/release-apk.yml); regenerate locally with
+# `flutterfire configure` if you need it for local Android builds.
 **/google-services.json
 **/GoogleService-Info.plist
 firebase-debug.log

@@ -1,78 +1,85 @@
 # FellaRide
 
-Prototype for Manipal Hackathon 2026 (M#26), Problem Statement P06 — "Build a
-Community from Zero: The FellaRide Butterfly Effect". Full context in
-[`docs/PROJECT_BRIEF.md`](docs/PROJECT_BRIEF.md).
+A cold-start engine for community carpooling: discover a target community's structure
+from public signals, rank the people most likely to become connectors, drivers, or
+early adopters, activate them with contextual (not generic) outreach, and track the
+whole growth loop — discovery → outreach → registration → first ride → referral →
+repeat usage — end to end.
 
-A cold-start engine for carpooling communities: discover a target community's
-structure from public signals, prioritize likely connectors/drivers/early
-adopters, and activate them through a growth loop (registration → first ride
-→ referral → repeat usage).
+## Live
 
-## Monorepo layout
+| | |
+|---|---|
+| 📱 Mobile app | [**Download APK**](https://github.com/chethankotian2005/FellaRide/releases/latest/download/FellaRide.apk) |
+| 📊 Growth dashboard | https://fellaride-dashboard.vercel.app |
+| 🔌 Backend API | https://fellaride-backend.onrender.com/health |
+
+The backend is on Render's free tier and spins down when idle — the first request
+after a quiet period can take ~30s to wake up. See
+[`docs/DEMO_WALKTHROUGH.md`](docs/DEMO_WALKTHROUGH.md) for a guided tour.
+
+## How it works
+
+- **Discover** — a signal-scoring service ranks community members as likely
+  connectors, drivers, or early adopters from public-style signals (group
+  memberships, post frequency, stated commute info, connection count), with every
+  score broken down into the signals behind it — no black box.
+- **Activate** — the growth dashboard lets an operator log a contextual outreach
+  message to a ranked member and tracks what was sent.
+- **Match** — drivers post rides, passengers get ranked matches from a real
+  geo-distance + time-window algorithm, and can request to join.
+- **Grow** — referrals are tracked end to end (who invited whom, multi-level chains),
+  feeding a funnel: Discovered → Contacted → Registered → First ride → Referred →
+  Repeat rider.
+
+## Architecture
 
 ```
-/backend    Node.js + Express API (TypeScript) — matching, referrals, signal scoring
-/dashboard  Next.js app — growth/ops dashboard + public landing page
-/mobile     Flutter app — driver/passenger carpooling experience
-/docs       Project brief and other planning docs
+/backend    Node.js + Express + TypeScript — matching, referrals, signal scoring
+/dashboard  Next.js — growth/ops dashboard + public waitlist landing page
+/mobile     Flutter — driver/passenger carpooling app (Riverpod)
+/docs       Demo walkthrough
 ```
 
-Each part is independently runnable; `/backend` is the shared data layer both
-`/dashboard` and `/mobile` talk to.
+All three share one Firebase project (Firestore + Auth). `/backend` is the only thing
+that talks to Firestore directly; `/dashboard` and `/mobile` both go through its REST
+API. See [`backend/README.md`](backend/README.md) for the full endpoint reference.
 
-## Prerequisites
-
-- Node.js 20+ and npm
-- Flutter SDK (stable channel) and a configured platform toolchain (Android
-  Studio / Xcode) if you want to run on a device or simulator — running on
-  Chrome (`flutter run -d chrome`) needs neither
-- A Firebase project, if you want `/backend` to actually read/write data
-  (see below) — everything else runs without one
+**Stack**: Express, Next.js (App Router, Tailwind, recharts), Flutter (Riverpod,
+Firebase Auth), Firebase Admin SDK, Firestore. Deployed on Render (backend) and Vercel
+(dashboard); CI runs on GitHub Actions.
 
 ## Running locally
 
-### 1. Backend (`/backend`)
+### Backend
 
 ```bash
 cd backend
 npm install
 cp .env.example .env   # fill in your Firebase service account credentials
 npm run dev             # http://localhost:4000
+npm run seed             # populate Firestore with demo data
 ```
 
-The server boots and serves `GET /health` even without Firebase credentials
-configured; routes that touch Firestore return a clear `500` until `.env` is
-filled in. See [`backend/README.md`](backend/README.md) for the full API
-reference.
-
-### 2. Dashboard (`/dashboard`)
+### Dashboard
 
 ```bash
 cd dashboard
 npm install
-npm run dev              # http://localhost:3000
+npm run dev              # http://localhost:3000, reads NEXT_PUBLIC_API_BASE_URL
 ```
 
-Set `NEXT_PUBLIC_API_BASE_URL` (e.g. in `dashboard/.env.local`) once the
-dashboard starts calling the backend API.
-
-### 3. Mobile (`/mobile`)
+### Mobile
 
 ```bash
 cd mobile
 flutter pub get
-flutter run               # pick a connected device/simulator, or `-d chrome`
+flutter run               # pick a device/simulator, or `-d chrome`
 ```
 
-Firebase Core/Auth/Firestore are already added as dependencies
-(`mobile/pubspec.yaml`). To actually connect to a Firebase project, run
-`flutterfire configure` from the `mobile/` directory (requires the
-[FlutterFire CLI](https://firebase.google.com/docs/flutter/setup)) — this
-generates `lib/firebase_options.dart` and the platform config files
-(`google-services.json`, `GoogleService-Info.plist`), which are gitignored
-since they're per-environment.
-
-## Status
-
-Scaffolding only — see each package's own code for what's implemented so far.
+Connects to a Firebase project via `flutter pub add`-installed Firebase Core/Auth/
+Firestore and `lib/firebase_options.dart` (generated with the
+[FlutterFire CLI](https://firebase.google.com/docs/flutter/setup): `flutterfire
+configure`). Point it at a different backend with
+`flutter run --dart-define=API_BASE_URL=http://10.0.2.2:4000` (Android emulator) or
+any reachable URL.

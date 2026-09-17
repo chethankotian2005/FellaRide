@@ -268,4 +268,4 @@ for a real pilot community (currently a placeholder fictional "Crestwood Institu
 Technology — CSE Dept" — swap freely, nothing downstream depends on the specifics).
 The scoring formulas are simple and linear on purpose — see the doc comment atop
 `discovery.service.ts` for the exact weights/rationale and for notes on how this would
-be extended to real public data sources post-hackathon.
+be extended to real public data sources.

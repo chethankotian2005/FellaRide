@@ -2,12 +2,12 @@
  * Discovery / signal-scoring service.
  *
  * WHAT THIS IS: a prototype approximation of the "Discover -> Prioritize"
- * stages from the problem statement, running against a mock dataset (see
+ * stages of the growth pipeline, running against a mock dataset (see
  * discoveryMockData.ts) that stands in for a real pilot community, since
- * scraping live social platforms within hackathon time constraints (and
- * without a vetted legal-use review of each platform's ToS) is out of scope.
+ * scraping live social platforms (and the vetted legal-use ToS review each
+ * platform would need) is out of scope for this prototype.
  *
- * HOW THIS WOULD BE EXTENDED POST-HACKATHON, with real public signals:
+ * HOW THIS WOULD BE EXTENDED, with real public signals:
  *   - Public group/forum membership counts -> scraped counts from public
  *     Facebook/LinkedIn/WhatsApp-community group member lists (where public
  *     and ToS-permitting), or Discord/Telegram public group member APIs.
