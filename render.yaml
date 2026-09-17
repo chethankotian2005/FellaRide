@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: fellaride-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Render injects its own PORT — the app already reads
+      # process.env.PORT (see backend/src/config/env.ts), so it's
+      # deliberately not set here.
+      # Firebase Admin SDK credentials — set these in the Render dashboard
+      # (Environment tab), never commit real values here. See
+      # backend/.env.example for what each one is.
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_CLIENT_EMAIL
+        sync: false
+      - key: FIREBASE_PRIVATE_KEY
+        sync: false
+      - key: FIREBASE_DATABASE_URL
+        sync: false
